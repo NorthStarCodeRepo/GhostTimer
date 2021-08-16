@@ -1,0 +1,50 @@
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>
+		<li class="breadcrumb-item active" aria-current="page">{{ PageTitle }}</li>
+	</ol>
+</nav>
+<section class="container">
+	<div class="row">
+		<div class="col">
+			<h1><i class="fa fa-anchor"></i> {{ PageTitle }}</h1>
+		</div>
+	</div>
+	<hr />
+</section>
+<section class="container">
+	<div class="row text-center">
+		<div class="col">
+			<span class="speedInKnots__speed">{{ SpeedInKnots }}</span><span class="speedInKnots__symbol"> kt</span>
+		</div>
+	</div>
+	<br/>
+	<div class="row text-center">
+		<div class="col">
+			<div class="data__header1">{{ Direction }}</div>
+			<div class="data__bottom">{{ Heading }}&#176;</div>
+		</div>
+		<div class="col">
+			<div class="data__header1">{{ SpeedInMPH }}</div>
+			<div class="data__bottom">mph</div>
+		</div>
+	</div>
+	<br/>
+	<div class="row text-center">
+		<div class="col">
+			<div class="data__header2">{{ Latitude }}</div>
+			<div class="data__bottom">Latitude</div>
+		</div>
+		<div class="col">
+			<div class="data__header2">{{ Longitude }}</div>
+			<div class="data__bottom">Longitude</div>
+		</div>
+	</div>
+	<br/>
+	<div class="row text-center">
+		<div class="col">
+			<div class="data__header2">{{ Altitude }} ft</div>
+			<div class="data__bottom">Altitude</div>
+		</div>
+	</div>
+</section>
