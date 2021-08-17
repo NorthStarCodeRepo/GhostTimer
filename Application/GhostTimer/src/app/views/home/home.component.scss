@@ -1,31 +1,57 @@
-.speedInKnots
+.navbar
 {
-	&__speed
+	&__top-decor
 	{
-		font-size: 120px;
-    	line-height: 0.75;
-	}
-
-	&__symbol
-	{
-		font-size: 40px;
+		height: 10px;
+		background: linear-gradient(45deg,  #fabb02 0%,#ffe645 100%)
 	}
 }
 
-.data
+.dashboard
 {
-	&__header1
-	{
-		font-size: 40px;
-	}
+	height: calc(100vh - 100px);
+}
 
-	&__header2
-	{
-		font-size: 30px;
-	}
+.indicator {
+  &-speed {
+    &__speed {
+      font-size: 120px;
+      line-height: 0.75;
+    }
 
-	&__bottom
+    &__symbol {
+      font-size: 40px;
+    }
+  }
+
+  &-timer
+  {
+	  &__stopwatch
+	  {
+		  margin-top: 20px;
+		  font-size: 60px;
+	  }
+  }
+}
+
+.data {
+  &__header1 {
+    font-size: 40px;
+  }
+
+  &__header2 {
+    font-size: 30px;
+  }
+
+  &__bottom {
+    font-size: 20px;
+  }
+}
+
+.timer
+{
+	&__controls
 	{
-		font-size: 20px;
+		padding: 0.8rem 1.2rem;
 	}
 }

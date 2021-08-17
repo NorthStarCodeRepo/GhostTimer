@@ -35,15 +35,21 @@ export class HomeComponent implements OnInit
 
 	public CurrentTimer: any;
 
+	public TimerStarted = false;
+
 	public constructor() { }
 
-	public ngOnInit(): void { }
+	public ngOnInit(): void
+	{
+		this.WatchDevicePosition();
+	}
 
 	/**
 	 * Trigger the stopwatch to start running
 	 */
 	public StartTimerInterval(): void
 	{
+		this.TimerStarted = true;
 		// Reset the start time every time the timer is stopped and started
 		this.HundredthSeconds = 0;
 		this.timerStartDateTime = Date.now(); // This handles seconds
@@ -58,6 +64,15 @@ export class HomeComponent implements OnInit
 
 		// Log some data as soon as they hit start
 		this.GetDevicePosition();
+	}
+
+	/**
+	 * Clears the interval running for the stopwatch.
+	 */
+	public StopTimerInterval(): void
+	{
+		this.TimerStarted = false;
+		clearInterval(this.CurrentTimer);
 	}
 
 	/**
@@ -106,6 +121,7 @@ export class HomeComponent implements OnInit
 	}
 
 	/**
+	* Used to get the device location to be logged and compared against later on.
 	* https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
 	* https://www.w3schools.com/html/html5_geolocation.asp
 	*/
@@ -115,16 +131,6 @@ export class HomeComponent implements OnInit
 		{
 			window.navigator.geolocation.getCurrentPosition((position: GeolocationPosition) =>
 			{
-				// https://www.metric-conversions.org/length/meters-to-feet.htm
-				this.Altitude = Math.ceil(position.coords.altitude * 3.2808);
-				this.Latitude = position.coords.latitude;
-				this.Longitude = position.coords.longitude;
-				this.Heading = Math.ceil(position.coords.heading);
-				this.Direction = this.CalculateCompassHeading(this.Heading)
-
-				// https://www.inchcalculator.com/convert/meter-per-second-to-mile-per-hour/
-				this.SpeedInMPH = Math.ceil(Math.floor(position.coords.speed) * 2.236936);
-
 				var positionRecord = new PositionRecord();
 				positionRecord.Altitude = position.coords.altitude;
 				positionRecord.Heading = position.coords.heading;
@@ -143,11 +149,29 @@ export class HomeComponent implements OnInit
 	}
 
 	/**
-	 * Clears the interval running for the stopwatch.
+	 * Watches the active device position. Used for the output of dashboard data for feedback.
 	 */
-	public StopTimerInterval(): void
+	private WatchDevicePosition(): void
 	{
-		clearInterval(this.CurrentTimer);
+		if (window.navigator.geolocation)
+		{
+			window.navigator.geolocation.watchPosition((position: GeolocationPosition) =>
+			{
+				// https://www.metric-conversions.org/length/meters-to-feet.htm
+				this.Altitude = Math.ceil(position.coords.altitude * 3.2808);
+				this.Latitude = position.coords.latitude;
+				this.Longitude = position.coords.longitude;
+				this.Heading = Math.ceil(position.coords.heading);
+				this.Direction = this.CalculateCompassHeading(this.Heading)
+
+				// https://www.inchcalculator.com/convert/meter-per-second-to-mile-per-hour/
+				this.SpeedInMPH = Math.ceil(Math.floor(position.coords.speed) * 2.236936);
+			}, null, this.positionOptions);
+		}
+		else
+		{
+			alert("Location services are unavailable.");
+		}
 	}
 
 	/**
