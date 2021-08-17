@@ -4,18 +4,24 @@
 		<li class="breadcrumb-item active" aria-current="page">{{ PageTitle }}</li>
 	</ol>
 </nav>
-<section class="container">
-	<div class="row">
-		<div class="col">
-			<h1><i class="fa fa-anchor"></i> {{ PageTitle }}</h1>
-		</div>
-	</div>
-	<hr />
-</section>
+<div>
+	<button type="button" (click)="StartTimerInterval()">Start</button>
+	<button type="button" (click)="StopTimerInterval()">Stop</button>
+</div>
 <section class="container">
 	<div class="row text-center">
 		<div class="col">
-			<span class="speedInKnots__speed">{{ SpeedInKnots }}</span><span class="speedInKnots__symbol"> kt</span>
+			<span *ngIf="Hours < 10">0{{ Hours }}:</span>
+			<span *ngIf="Hours >= 10">{{ Hours }}:</span>
+			<span *ngIf="Minutes < 10">0{{ Minutes }}:</span>
+			<span *ngIf="Minutes >= 10">{{ Minutes }}:</span>
+			<span *ngIf="Seconds < 10">0{{ Seconds }}:</span>
+			<span *ngIf="Seconds >= 10">{{ Seconds }}:</span>
+			<span *ngIf="HundredthSeconds < 10">0{{ HundredthSeconds }}</span>
+			<span *ngIf="HundredthSeconds >= 10">{{ HundredthSeconds }}</span>
+		</div>
+		<div class="col">
+			<span class="speedInKnots__speed">{{ SpeedInMPH }}</span><span class="speedInKnots__symbol"> mph</span>
 		</div>
 	</div>
 	<br/>
@@ -25,8 +31,8 @@
 			<div class="data__bottom">{{ Heading }}&#176;</div>
 		</div>
 		<div class="col">
-			<div class="data__header1">{{ SpeedInMPH }}</div>
-			<div class="data__bottom">mph</div>
+			<div class="data__header2">{{ Altitude }} ft</div>
+			<div class="data__bottom">Altitude</div>
 		</div>
 	</div>
 	<br/>
@@ -38,13 +44,6 @@
 		<div class="col">
 			<div class="data__header2">{{ Longitude }}</div>
 			<div class="data__bottom">Longitude</div>
-		</div>
-	</div>
-	<br/>
-	<div class="row text-center">
-		<div class="col">
-			<div class="data__header2">{{ Altitude }} ft</div>
-			<div class="data__bottom">Altitude</div>
 		</div>
 	</div>
 </section>
