@@ -10,5 +10,8 @@
 	</ul>
 </nav>
 <div *ngFor="let positionRecord of PositionRecords; let i = index">
-	Altitude: {{positionRecord.Altitude}}
+	PositionRecordLogID: {{positionRecord.PositionRecordLogID}}<br/>
+	Altitude: {{positionRecord.Altitude}}<br/>
+	RecordedDateTime: {{positionRecord.RecordedDateTime}}
+	<hr/>
 </div>

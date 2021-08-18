@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { PositionRecord } from 'src/app/domain/core/position-record';
 import { LocalStorageService } from 'src/app/domain/system/storage/local-storage.service';
 
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit
 	private readonly timerInterval = 100; // milliseconds
 	private wakeLock: any = null;
 	private positionRecordStorageName: string = "_position_";
+	private positionRecordLogID: number = 0;
 
 	public timerStartDateTime: number;
 	public Altitude: any = 0;
@@ -119,12 +121,6 @@ export class HomeComponent implements OnInit
 		{
 			this.Hours += 1;
 		}
-
-		// Take a data reading every X seconds according to the array values
-		if (this.readGeolocationDataIntervals.includes(totalDecimalElapsed))
-		{
-
-		}
 	}
 
 	/**
@@ -139,11 +135,13 @@ export class HomeComponent implements OnInit
 			window.navigator.geolocation.getCurrentPosition((position: GeolocationPosition) =>
 			{
 				var positionRecord = new PositionRecord();
+				positionRecord.PositionRecordLogID = this.positionRecordLogID;
 				positionRecord.Altitude = position.coords.altitude;
 				positionRecord.Heading = position.coords.heading;
 				positionRecord.Latitude = position.coords.latitude;
 				positionRecord.Longitude = position.coords.longitude;
 				positionRecord.Speed = position.coords.speed;
+				positionRecord.RecordedDateTime = moment().format();
 				
 				this.SaveLocalPositionRecord(this.positionRecordStorageName, positionRecord);
 			}, null, this.positionOptions);
@@ -258,6 +256,8 @@ export class HomeComponent implements OnInit
 	 */
 	public SaveLocalPositionRecord(storageItemName: string, positionRecord: PositionRecord): void
 	{
+		// Increment the current log ID
+		this.positionRecordLogID += 1;
 		let positionRecords = this.localStorageService.GetItem<PositionRecord[]>(storageItemName);
 
 		// If the storage item already exists let's unpack it and then update it
