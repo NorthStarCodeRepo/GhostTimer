@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PositionRecord } from 'src/app/domain/core/position-record';
+import { LocalStorageService } from 'src/app/domain/system/storage/local-storage.service';
 
 @Component({
 	selector: 'app-home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit
 	private readGeolocationDataIntervals: number[] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 	private readonly timerInterval = 100; // milliseconds
 	private wakeLock: any = null;
+	private positionRecordStorageName: string = "_position_";
 
 	public timerStartDateTime: number;
 	public Altitude: any = 0;
@@ -39,11 +41,10 @@ export class HomeComponent implements OnInit
 	public WakeLockClass = "badge badge-pill badge-info";
 	public WakeLockMessage = "N/A";
 
-	public constructor() { }
+	public constructor(private localStorageService: LocalStorageService) { }
 
 	public ngOnInit(): void
 	{
-		this.WatchDevicePosition();
 		this.ConfigureWakeLock();
 	}
 
@@ -52,6 +53,7 @@ export class HomeComponent implements OnInit
 	 */
 	public StartTimerInterval(): void
 	{
+		this.localStorageService.RemoveItem(this.positionRecordStorageName);
 		this.TimerStarted = true;
 		// Reset the start time every time the timer is stopped and started
 		this.HundredthSeconds = 0;
@@ -67,6 +69,7 @@ export class HomeComponent implements OnInit
 
 		// Log some data as soon as they hit start
 		this.GetDevicePosition();
+		this.WatchDevicePosition();
 	}
 
 	/**
@@ -140,9 +143,8 @@ export class HomeComponent implements OnInit
 				positionRecord.Latitude = position.coords.latitude;
 				positionRecord.Longitude = position.coords.longitude;
 				positionRecord.Speed = position.coords.speed;
-
-				console.log(JSON.stringify(positionRecord));
-
+				
+				this.SaveLocalPositionRecord(this.positionRecordStorageName, positionRecord);
 			}, null, this.positionOptions);
 		}
 		else
@@ -245,6 +247,31 @@ export class HomeComponent implements OnInit
 		{
 			this.WakeLockClass = "badge badge-pill badge-warning";
 			this.WakeLockMessage = "Wake Lock Not Supported";
+		}
+	}
+
+	/**
+	 * Saves or updates the localStorage object for the PositionsRecords.
+	 * @param storageItemName - The key for the save item.
+	 * @param positionRecord - The value for the position record.
+	 */
+	public SaveLocalPositionRecord(storageItemName: string, positionRecord: PositionRecord): void
+	{
+		let positionRecords = this.localStorageService.GetItem<PositionRecord[]>(storageItemName);
+
+		// If the storage item already exists let's unpack it and then update it
+		if (positionRecords != null)
+		{
+			positionRecords.push(positionRecord);
+			this.localStorageService.SetItem(storageItemName, positionRecords);
+		}
+		else
+		{
+			// Create a new array of position records to be set as the localStorage value
+			let positionRecordsLocalStore: PositionRecord[] = [];
+			positionRecordsLocalStore.push(positionRecord);
+
+			this.localStorageService.SetItem(storageItemName, positionRecordsLocalStore);
 		}
 	}
 }
