@@ -11,15 +11,16 @@ export class HomeComponent implements OnInit
 	private readonly positionOptions: PositionOptions = {
 		enableHighAccuracy: true
 	}
-	public timerStartDateTime: number;
-	private readonly timerInterval = 100; // milliseconds
 
 	/**
 	 * At set intervals record the new location data.
 	 * Read the data at every X seconds. Super gross way to do this.
 	 */
 	private readGeolocationDataIntervals: number[] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+	private readonly timerInterval = 100; // milliseconds
+	private wakeLock: any = null;
 
+	public timerStartDateTime: number;
 	public Altitude: any = 0;
 	public PageTitle: string = "Ghost Timer";
 	public Direction: string = "N/A"
@@ -34,14 +35,16 @@ export class HomeComponent implements OnInit
 	public Hours: number = 0;
 
 	public CurrentTimer: any;
-
 	public TimerStarted = false;
+	public WakeLockClass = "badge badge-pill badge-info";
+	public WakeLockMessage = "N/A";
 
 	public constructor() { }
 
 	public ngOnInit(): void
 	{
 		this.WatchDevicePosition();
+		this.ConfigureWakeLock();
 	}
 
 	/**
@@ -175,9 +178,9 @@ export class HomeComponent implements OnInit
 	}
 
 	/**
-		 * https://www7.ncdc.noaa.gov/climvis/help_wind.html
-		 * @param heading
-		 */
+	 * https://www7.ncdc.noaa.gov/climvis/help_wind.html
+	 * @param heading
+	 */
 	private CalculateCompassHeading(heading: number): string
 	{
 		let compassDirection = "N/A";
@@ -216,5 +219,32 @@ export class HomeComponent implements OnInit
 		}
 
 		return compassDirection;
+	}
+
+	/**
+	 * Configure the Wake Lock feature to keep the screen awake all the time.
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API
+	 */
+	private async ConfigureWakeLock(): Promise<void>
+	{
+		if ('wakeLock' in navigator)
+		{
+			try
+			{
+				//@ts-ignore - wakeLock does not exist on type navigator. Yes it does. It's new.
+				this.wakeLock = await navigator.wakeLock.request('screen');
+				this.WakeLockClass = "badge badge-pill badge-success";
+				this.WakeLockMessage = "Wake Lock Active";
+			}
+			catch (err)
+			{
+				this.WakeLockClass = "badge badge-pill badge-danger";
+				this.WakeLockMessage = err.message;
+			}
+		} else
+		{
+			this.WakeLockClass = "badge badge-pill badge-warning";
+			this.WakeLockMessage = "Wake Lock Not Supported";
+		}
 	}
 }
