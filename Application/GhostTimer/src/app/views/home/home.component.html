@@ -1,12 +1,12 @@
 <div class="navbar__top-decor"></div>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	<a class="navbar-brand" href="#">
-		GhostTimer&trade;
+		GhostTimer&trade;<span class="badge badge-pill badge-success" *ngIf="PositionRecordSaved"><i class="fa fa-save"></i></span>
 	</a>
 	<ul class="navbar-nav">
-		<!-- <li class="nav-item">
-			<a class="nav-link" href="#">Link 1</a>
-		</li> -->
+		<li class="nav-item">
+			<a class="nav-link" href="view-data">View Data</a>
+		</li>
 	</ul>
 </nav>
 <section class="container dashboard">

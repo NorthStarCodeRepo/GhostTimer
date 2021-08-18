@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit
 	public TimerStarted = false;
 	public WakeLockClass = "badge badge-pill badge-info";
 	public WakeLockMessage = "N/A";
+	public PositionRecordSaved: boolean = false;
 
 	public constructor(private localStorageService: LocalStorageService) { }
 
@@ -273,5 +274,12 @@ export class HomeComponent implements OnInit
 
 			this.localStorageService.SetItem(storageItemName, positionRecordsLocalStore);
 		}
+
+		// Do a quick update for the UI to show that a record was just logged
+		this.PositionRecordSaved = true;
+		setTimeout(() =>
+		{
+			this.PositionRecordSaved = false;
+		}, 1000);
 	}
 }

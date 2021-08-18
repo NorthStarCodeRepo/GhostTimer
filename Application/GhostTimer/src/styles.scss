@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+.navbar
+{
+	&__top-decor
+	{
+		height: 10px;
+		background: linear-gradient(45deg,  #fabb02 0%,#ffe645 100%)
+	}
+}

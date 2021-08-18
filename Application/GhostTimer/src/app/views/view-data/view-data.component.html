@@ -1,0 +1,14 @@
+<div class="navbar__top-decor"></div>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<a class="navbar-brand" href="#">
+		GhostTimer&trade;
+	</a>
+	<ul class="navbar-nav">
+		<li class="nav-item">
+			<a class="nav-link" href="/">Home</a>
+		</li>
+	</ul>
+</nav>
+<div *ngFor="let positionRecord of PositionRecords; let i = index">
+	Altitude: {{positionRecord.Altitude}}
+</div>
