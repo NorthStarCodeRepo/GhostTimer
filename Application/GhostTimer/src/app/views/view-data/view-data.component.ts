@@ -21,8 +21,37 @@ export class ViewDataComponent implements OnInit
 
 		if (records != null)
 		{
-			this.PositionRecords = records;
+			records.forEach((record) =>
+			{
+				this.PositionRecords.push(record);
+			});
 		}
 	}
 
+	/**
+	 * Generates a simple CSV file of the data to download.
+	 */
+	public GenerateCSVForDownload(): void
+	{
+		if (this.PositionRecords?.length > 0)
+		{
+			// Create header row
+			let csvContent = `PositionRecordLogID,Altitude,Heading,Latitude,Longitude,SpeedMPH,RecordedDateTime\r\n`;
+
+			this.PositionRecords.forEach((rowArray) =>
+			{
+				csvContent += `${rowArray.PositionRecordLogID},${rowArray.Altitude},${rowArray.Heading},${rowArray.Latitude},${rowArray.Longitude},${rowArray.SpeedMilesPerHour},${rowArray.RecordedDateTime}\r\n`;
+			});
+
+			var hiddenElement = document.createElement('a');
+			hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvContent);
+			hiddenElement.target = '_blank';
+			hiddenElement.download = 'ghost_timer_export.csv';
+			hiddenElement.click();
+		}
+		else
+		{
+			alert("No data collected, yet.");
+		}
+	}
 }

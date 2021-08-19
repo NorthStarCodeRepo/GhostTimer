@@ -15,6 +15,9 @@ export class PositionRecord
     public Heading: number | null;
     public Latitude: number;
     public Longitude: number;
-    public Speed: number | null;
+	public SpeedKilometersPerHour: number | null;
+	public SpeedKnots: number | null;
+	public SpeedMetersPerSecond: number | null;
+	public SpeedMilesPerHour: number | null;
 	public RecordedDateTime: string;
 }

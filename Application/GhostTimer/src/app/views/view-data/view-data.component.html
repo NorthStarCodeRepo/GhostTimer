@@ -9,6 +9,7 @@
 		</li>
 	</ul>
 </nav>
+<button type="button" class="btn btn-success" (click)="GenerateCSVForDownload()">Download CSV</button>
 <div *ngFor="let positionRecord of PositionRecords; let i = index">
 	PositionRecordLogID: {{positionRecord.PositionRecordLogID}}<br/>
 	Altitude: {{positionRecord.Altitude}}<br/>

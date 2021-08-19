@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit
 	 * At set intervals record the new location data.
 	 * Read the data at every X seconds. Super gross way to do this.
 	 */
-	private readGeolocationDataIntervals: number[] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+	private readGeolocationDataIntervals: number[] = [0, 10, 20, 30, 40, 50];
 	private readonly timerInterval = 100; // milliseconds
 	private wakeLock: any = null;
 	private positionRecordStorageName: string = "_position_";
@@ -140,7 +140,10 @@ export class HomeComponent implements OnInit
 				positionRecord.Heading = position.coords.heading;
 				positionRecord.Latitude = position.coords.latitude;
 				positionRecord.Longitude = position.coords.longitude;
-				positionRecord.Speed = position.coords.speed;
+				positionRecord.SpeedKilometersPerHour = Math.round(position.coords.speed * 3.6);
+				positionRecord.SpeedKnots = Math.round(position.coords.speed * 1.943844);
+				positionRecord.SpeedMetersPerSecond = position.coords.speed;
+				positionRecord.SpeedMilesPerHour = Math.round(position.coords.speed * 2.236936);
 				positionRecord.RecordedDateTime = moment().format();
 				
 				this.SaveLocalPositionRecord(this.positionRecordStorageName, positionRecord);
